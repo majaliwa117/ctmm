@@ -33,7 +33,7 @@ Multilaterize(data, RSSIpar, Start = NULL, precision = 1/2, max_iter = 1e+05, ..
   \describe{
     \item{\code{RSSI}}{Integer RSSI value.}
     \item{\code{Shape}}{Estimated Gamma shape parameter corresponding to the RSSI value.}
-    \item{\code{Lambda}}{Estimated Gamma scale parameter corresponding to the RSSI value.}
+    \item{\code{Rate}}{Estimated Gamma rate parameter corresponding to the RSSI value.}
   }
 }
   \item{Start}{ An optional initial estimate of the animal's \code{(x, y)}
@@ -50,7 +50,7 @@ This function is intended to be used after fitting a gamma GLM to calibration da
 establish a relationship between square distances and the integer RSSI values.
 The gamma GLM models squared distance rather than distance because this
 provides a convenient likelihood with analytic derivatives for optimization.
-The fitted model is used to infer Gamma distribution parameters the \code{Shape} and \code{Lambda}
+The fitted model is used to infer Gamma distribution parameters the \code{Shape} and \code{Rate}
 for each row and over the range of integer RSSI values. These parameters are supplied to \code{RSSIpar} object and
 provides distribution over probable distances for each RSSI value. The gamma-GLM is in the following form:
 
@@ -58,8 +58,7 @@ provides distribution over probable distances for each RSSI value. The gamma-GLM
 
 where \eqn{D_i^2 = (\mathbf{r}-\mathbf{r}_i)^2 = {(x-x_i)^2+(y-y_i)^2}},
 \eqn{\mathbf{r}=(x,y)} is the unknown location of the animal,
-and where \eqn{\alpha_i} and \eqn{\lambda_i} are the shape and
-scale parameters of the distance distribution of the RSSI observation \code{i}.
+and where \eqn{\alpha_i} and \eqn{\lambda_i} are the shape and rate parameters of the distance distribution of the RSSI observation \code{i}.
 Because estimating the location of the animal at a particular time requires
 multiple observations to be recorded simultaneously from
 different receivers, we can write the joint log-density of

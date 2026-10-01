@@ -28,7 +28,7 @@ Multilaterize.data.frame<-function(data,RSSIpar,Start=NULL,precision=1/2,
     stop("Missing required columns for 'data': ", paste(missing_cols, collapse = ", "))
   }
 
-  required_cols <- c("RSSI", "Shape", "Lambda")
+  required_cols <- c("RSSI", "Shape", "Rate")
   missing_cols <- required_cols[!required_cols %in% names(RSSIpar)]
   if (length(missing_cols) > 0) {
     stop("Missing required columns for 'RSSIpar': ", paste(missing_cols, collapse = ", "))
@@ -51,7 +51,7 @@ Multilaterize.data.frame<-function(data,RSSIpar,Start=NULL,precision=1/2,
   Shape<-RSSIpar$Shape[match(Pred_df$RSSI,RSSIpar$RSSI)]
 
   ## Get lambda parameter for each RSSI observation
-  lambda<-RSSIpar$Lambda[match(Pred_df$RSSI,RSSIpar$RSSI)]
+  lambda<-RSSIpar$Rate[match(Pred_df$RSSI,RSSIpar$RSSI)]
 
 
   ## Location matrix of nodes
@@ -66,7 +66,7 @@ Multilaterize.data.frame<-function(data,RSSIpar,Start=NULL,precision=1/2,
   for(t in 1:max_iter){
 
     ## Deviation from current estimates to node locations
-    Diff<-sweep(r_i,2,r)
+    Diff<-sweep(r_i,2,r,"-")
     Diff<--Diff
 
     ## Calculate squared distance
@@ -113,7 +113,8 @@ Multilaterize.data.frame<-function(data,RSSIpar,Start=NULL,precision=1/2,
     )
 
     ## The step for updating the location
-    Step<-hess_inv%*%Grad
+    #Step<-hess_inv%*%Grad
+    Step<-solve(hess,Grad)
 
     ## Update location
     r_new<-r-Step
